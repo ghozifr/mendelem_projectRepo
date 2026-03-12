@@ -114,7 +114,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;display:flex;ba
     </form>
 
     <div class="login-back">
-      <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i> Kembali ke Website</a>
+      <a href="{{ url('/') }}"><i class="fas fa-arrow-left"></i> Kembali ke Website</a>
     </div>
   </div>
 </div>

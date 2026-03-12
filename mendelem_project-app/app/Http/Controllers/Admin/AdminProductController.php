@@ -2,18 +2,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Article, Product, Project, Gallery, ContactMessage, Slider, TeamMember};
+use Illuminate\Http\Request;
+use App\Models\Product;
+
 class AdminProductController extends Controller
 {
     public function index()
     {
-        $products = \App\Models\Product::orderBy('order')->get();
+        $products = Product::orderBy('order')->get();
         return view('admin.products.index', compact('products'));
     }
 
-    public function create() { return view('admin.products.form', ['product'=>null]); }
+    public function create() { return view('admin.products.form', ['product' => null]); }
 
-    public function store(\Illuminate\Http\Request $r)
+    public function store(Request $r)
     {
         $data = $r->validate([
             'name_id'        => 'required|string|max:255',
@@ -28,22 +30,24 @@ class AdminProductController extends Controller
             'price_max'      => 'nullable|numeric|min:0',
             'unit'           => 'nullable|string|max:50',
             'availability'   => 'required|in:available,seasonal,out_of_stock',
-            'is_featured'    => 'boolean',
-            'is_active'      => 'boolean',
-            'order'          => 'integer|min:0',
+            'order'          => 'nullable|integer|min:0',
         ]);
-        $data['is_featured'] = $r->boolean('is_featured');
-        $data['is_active']   = $r->boolean('is_active', true);
+
+        $data['is_featured'] = $r->has('is_featured') ? 1 : 0;
+        $data['is_active']   = $r->has('is_active')   ? 1 : 0;
+        $data['order']       = $data['order'] ?? 0;
+
         if ($r->hasFile('thumbnail')) {
             $data['thumbnail'] = $r->file('thumbnail')->store('products', 'public');
         }
-        \App\Models\Product::create($data);
+
+        Product::create($data);
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
-    public function edit(\App\Models\Product $product) { return view('admin.products.form', compact('product')); }
+    public function edit(Product $product) { return view('admin.products.form', compact('product')); }
 
-    public function update(\Illuminate\Http\Request $r, \App\Models\Product $product)
+    public function update(Request $r, Product $product)
     {
         $data = $r->validate([
             'name_id'        => 'required|string|max:255',
@@ -58,34 +62,36 @@ class AdminProductController extends Controller
             'price_max'      => 'nullable|numeric|min:0',
             'unit'           => 'nullable|string|max:50',
             'availability'   => 'required|in:available,seasonal,out_of_stock',
-            'is_featured'    => 'boolean',
-            'is_active'      => 'boolean',
-            'order'          => 'integer|min:0',
+            'order'          => 'nullable|integer|min:0',
         ]);
+
+        $data['is_featured'] = $r->has('is_featured') ? 1 : 0;
+        $data['is_active']   = $r->has('is_active')   ? 1 : 0;
+        $data['order']       = $data['order'] ?? 0;
+
         if ($r->hasFile('thumbnail')) {
             if ($product->thumbnail) \Storage::disk('public')->delete($product->thumbnail);
             $data['thumbnail'] = $r->file('thumbnail')->store('products', 'public');
         }
-        $data['is_featured'] = $r->boolean('is_featured');
-        $data['is_active']   = $r->boolean('is_active', true);
+
         $product->update($data);
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui!');
     }
 
-    public function destroy(\App\Models\Product $product)
+    public function destroy(Product $product)
     {
         if ($product->thumbnail) \Storage::disk('public')->delete($product->thumbnail);
         $product->delete();
         return redirect()->route('admin.products.index')->with('success', 'Produk dihapus.');
     }
 
-    public function uploadGallery(\Illuminate\Http\Request $r, \App\Models\Product $product)
+    public function uploadGallery(Request $r, Product $product)
     {
         $r->validate(['image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120']);
         $path    = $r->file('image')->store('products/gallery', 'public');
         $gallery = $product->gallery ?? [];
         $gallery[] = $path;
         $product->update(['gallery' => $gallery]);
-        return response()->json(['success'=>true,'path'=>asset('storage/'.$path)]);
+        return response()->json(['success' => true, 'path' => asset('storage/' . $path)]);
     }
 }

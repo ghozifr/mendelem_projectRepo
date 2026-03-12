@@ -181,7 +181,7 @@ select.form-control{cursor:pointer}
     <a href="{{ route('admin.dashboard') }}" class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
       <i class="fas fa-tachometer-alt"></i> Dashboard
     </a>
-    <a href="{{ route('home') }}" target="_blank" class="nav-item">
+    <a href="{{ url('/')  }}" target="_blank" class="nav-item">
       <i class="fas fa-external-link-alt"></i> Lihat Website
     </a>
 
@@ -252,7 +252,7 @@ select.form-control{cursor:pointer}
       <a href="{{ route('admin.messages.index') }}" class="topbar-btn" title="Pesan">
         <i class="fas fa-envelope"></i>
       </a>
-      <a href="{{ route('home') }}" target="_blank" class="topbar-btn" title="Lihat Website">
+      <a href="{{ url('/')  }}" target="_blank" class="topbar-btn" title="Lihat Website">
         <i class="fas fa-external-link-alt"></i>
       </a>
     </div>
