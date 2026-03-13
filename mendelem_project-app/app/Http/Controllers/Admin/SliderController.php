@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Slider;
+use Illuminate\Support\Facades\Storage;
 
 class SliderController extends Controller
 {
@@ -31,7 +32,8 @@ class SliderController extends Controller
             'btn_secondary_label_en' => 'nullable|string|max:100',
             'btn_secondary_url'      => 'nullable|string|max:255',
             'media_type'             => 'required|in:image,video',
-            'media_file'             => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,mp4,webm|max:51200',
+            // Point 7: video up to 2GB (validation max in KB)
+            'media_file'             => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,mp4,webm,mov,avi|max:2097152',
             'order'                  => 'nullable|integer|min:0',
         ]);
 
@@ -65,7 +67,7 @@ class SliderController extends Controller
             'btn_secondary_label_en' => 'nullable|string|max:100',
             'btn_secondary_url'      => 'nullable|string|max:255',
             'media_type'             => 'required|in:image,video',
-            'media_file'             => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,mp4,webm|max:51200',
+            'media_file'             => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,mp4,webm,mov,avi|max:2097152',
             'order'                  => 'nullable|integer|min:0',
         ]);
 
@@ -73,7 +75,7 @@ class SliderController extends Controller
         $data['order']     = $data['order'] ?? 0;
 
         if ($r->hasFile('media_file')) {
-            if ($slider->media_path) \Storage::disk('public')->delete($slider->media_path);
+            if ($slider->media_path) Storage::disk('public')->delete($slider->media_path);
             $data['media_path'] = $r->file('media_file')->store('sliders', 'public');
         }
         unset($data['media_file']);
@@ -84,8 +86,18 @@ class SliderController extends Controller
 
     public function destroy(Slider $slider)
     {
-        if ($slider->media_path) \Storage::disk('public')->delete($slider->media_path);
+        if ($slider->media_path) Storage::disk('public')->delete($slider->media_path);
         $slider->delete();
         return redirect()->route('admin.sliders.index')->with('success', 'Slider dihapus.');
+    }
+
+    // Point 3: Delete media only (keep the slider)
+    public function deleteMedia(Request $r, Slider $slider)
+    {
+        if ($slider->media_path) {
+            Storage::disk('public')->delete($slider->media_path);
+            $slider->update(['media_path' => null]);
+        }
+        return back()->with('success', 'Media slider berhasil dihapus.');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Gallery;
+use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
@@ -13,11 +14,13 @@ class GalleryController extends Controller
         return view('admin.gallery.index', compact('items'));
     }
 
+    // Point 7: Support large videos (up to 2GB per-file in PHP config)
     public function store(Request $r)
     {
         $r->validate([
             'files'    => 'required',
-            'files.*'  => 'file|mimes:jpg,jpeg,png,webp,gif,mp4,webm|max:51200',
+            // max:2097152 = 2GB in KB
+            'files.*'  => 'file|mimes:jpg,jpeg,png,webp,gif,mp4,webm,mov,avi|max:2097152',
             'title_id' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:100',
         ]);
@@ -33,7 +36,7 @@ class GalleryController extends Controller
             if (!$file || !$file->isValid()) continue;
 
             $ext  = strtolower($file->getClientOriginalExtension());
-            $type = in_array($ext, ['mp4', 'webm']) ? 'video' : 'image';
+            $type = in_array($ext, ['mp4', 'webm', 'mov', 'avi']) ? 'video' : 'image';
 
             Gallery::create([
                 'title_id'  => $r->title_id,
@@ -49,10 +52,11 @@ class GalleryController extends Controller
         return back()->with('success', $count . ' file berhasil diupload!');
     }
 
+    // Point 3: Delete gallery item
     public function destroy(Gallery $gallery)
     {
-        \Storage::disk('public')->delete($gallery->file_path);
+        Storage::disk('public')->delete($gallery->file_path);
         $gallery->delete();
-        return back()->with('success', 'File dihapus.');
+        return back()->with('success', 'File berhasil dihapus.');
     }
 }

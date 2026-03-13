@@ -15,59 +15,69 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\TranslateController;
 
-// ── PUBLIC ────────────────────────────────────────────────
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::post('/contact', [HomeController::class, 'contact'])->name('contact.send');
+// PUBLIC PAGES WITH THEIR OWN URLs
+Route::get('/',         [HomeController::class, 'index'])->name('home');
+Route::get('/proyek',   [HomeController::class, 'page'])->defaults('pageName','projects')->name('page.projects');
+Route::get('/produk',   [HomeController::class, 'page'])->defaults('pageName','products')->name('page.products');
+Route::get('/galeri',   [HomeController::class, 'page'])->defaults('pageName','gallery')->name('page.gallery');
+Route::get('/tentang',  [HomeController::class, 'page'])->defaults('pageName','about')->name('page.about');
+Route::get('/artikel',  [HomeController::class, 'page'])->defaults('pageName','articles')->name('page.articles');
+Route::get('/lokasi',   [HomeController::class, 'page'])->defaults('pageName','map')->name('page.map');
+Route::get('/dukungan', [HomeController::class, 'page'])->defaults('pageName','support')->name('page.support');
 
-// ── ADMIN AUTH ─────────────────────────────────────────────
+// PRODUCT DETAIL
+Route::get('/produk/{product}',       [HomeController::class, 'productDetail'])->name('product.detail');
+Route::post('/produk/{product}/pesan',[HomeController::class, 'productInquiry'])->name('product.inquiry')->middleware('throttle:10,1');
+
+// ARTICLE DETAIL
+Route::get('/artikel/{article:slug}', [HomeController::class, 'articleDetail'])->name('article.detail');
+
+// CONTACT
+Route::post('/kontak', [HomeController::class, 'contact'])->name('contact.send')->middleware('throttle:10,1');
+
+// ADMIN AUTH
 Route::prefix('admin')->name('admin.')->group(function () {
-
     Route::get('login',  [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
-    Route::post('login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('login', [AuthController::class, 'login'])->name('login.post')->middleware('throttle:5,1');
     Route::post('logout',[AuthController::class, 'logout'])->name('logout');
 
     Route::middleware(['auth', 'admin'])->group(function () {
-
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Sliders
         Route::resource('sliders', SliderController::class);
+        Route::delete('sliders/{slider}/media', [SliderController::class, 'deleteMedia'])->name('sliders.media.delete');
 
-        // Projects
         Route::resource('projects', AdminProjectController::class);
-        Route::post('projects/{project}/gallery',          [AdminProjectController::class, 'uploadGallery'])->name('projects.gallery.upload');
-        Route::delete('projects/{project}/gallery/{index}',[AdminProjectController::class, 'deleteGallery'])->name('projects.gallery.delete');
+        Route::post('projects/{project}/gallery',           [AdminProjectController::class, 'uploadGallery'])->name('projects.gallery.upload');
+        Route::delete('projects/{project}/gallery/{index}', [AdminProjectController::class, 'deleteGallery'])->name('projects.gallery.delete');
+        Route::delete('projects/{project}/thumbnail',       [AdminProjectController::class, 'deleteThumbnail'])->name('projects.thumbnail.delete');
 
-        // Products
         Route::resource('products', AdminProductController::class);
-        Route::post('products/{product}/gallery', [AdminProductController::class, 'uploadGallery'])->name('products.gallery.upload');
+        Route::post('products/{product}/gallery',           [AdminProductController::class, 'uploadGallery'])->name('products.gallery.upload');
+        Route::delete('products/{product}/gallery/{index}', [AdminProductController::class, 'deleteGallery'])->name('products.gallery.delete');
+        Route::delete('products/{product}/thumbnail',       [AdminProductController::class, 'deleteThumbnail'])->name('products.thumbnail.delete');
 
-        // Articles
         Route::resource('articles', AdminArticleController::class);
-        Route::post('articles/{article}/publish', [AdminArticleController::class, 'publish'])->name('articles.publish');
-        Route::post('articles/{article}/draft',   [AdminArticleController::class, 'draft'])->name('articles.draft');
+        Route::post('articles/{article}/publish',     [AdminArticleController::class, 'publish'])->name('articles.publish');
+        Route::post('articles/{article}/draft',       [AdminArticleController::class, 'draft'])->name('articles.draft');
+        Route::delete('articles/{article}/thumbnail', [AdminArticleController::class, 'deleteThumbnail'])->name('articles.thumbnail.delete');
 
-        // Gallery
         Route::resource('gallery', GalleryController::class)->only(['index','store','destroy']);
 
-        // Team
         Route::resource('team', TeamController::class);
+        Route::delete('team/{member}/photo', [TeamController::class, 'deletePhoto'])->name('team.photo.delete');
 
-        // Statistics
         Route::resource('statistics', StatisticController::class)->only(['index','store','update','destroy']);
 
-        // Settings
         Route::get('settings',        [SettingController::class, 'index'])->name('settings.index');
         Route::post('settings',       [SettingController::class, 'update'])->name('settings.update');
         Route::post('settings/logo',  [SettingController::class, 'uploadLogo'])->name('settings.logo');
 
-        // Messages
-        Route::get('messages',                  [MessageController::class, 'index'])->name('messages.index');
-        Route::get('messages/{message}',        [MessageController::class, 'show'])->name('messages.show');
-        Route::delete('messages/{message}',     [MessageController::class, 'destroy'])->name('messages.destroy');
+        Route::get('messages',                      [MessageController::class, 'index'])->name('messages.index');
+        Route::get('messages/{message}',            [MessageController::class, 'show'])->name('messages.show');
+        Route::delete('messages/{message}',         [MessageController::class, 'destroy'])->name('messages.destroy');
         Route::post('messages/{message}/mark-read', [MessageController::class, 'markRead'])->name('messages.markRead');
 
-        // Translate
         Route::post('translate', [TranslateController::class, 'translate'])->name('translate');
     });
 });
