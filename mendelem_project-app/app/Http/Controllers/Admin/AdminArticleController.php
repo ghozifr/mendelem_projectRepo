@@ -37,6 +37,7 @@ class AdminArticleController extends Controller
         }
 
         \App\Models\Article::create($data);
+
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil ditambahkan!');
     }
 

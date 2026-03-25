@@ -11,25 +11,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-:root{--blue:#0f75bd;--blue-dark:#0a5a91;--blue-light:#3b9dd4;--green:#8cc63e;--green-dark:#6fa02e;--white:#fff;--bg:#f8fafc;--bg2:#eef3f8;--card:#fff;--text:#1a2332;--text2:#4a5568;--text3:#718096;--border:#e2e8f0;--shadow:0 4px 24px rgba(15,117,189,.08);--shadow-lg:0 12px 48px rgba(15,117,189,.16);--radius:16px;--nav-h:72px;--transition:.3s cubic-bezier(.4,0,.2,1)}
+:root{--blue:#0f75bd;--blue-dark:#0a5a91;--blue-light:#3b9dd4;--green:#8cc63e;--green-dark:#6fa02e;--white:#fff;--bg:#f8fafc;--bg2:#eef3f8;--card:#fff;--text:#1a2332;--text2:#4a5568;--text3:#718096;--border:#e2e8f0;--shadow:0 4px 24px rgba(15,117,189,.08);--shadow-lg:0 12px 48px rgba(15,117,189,.16);--radius:16px;--nav-h:88px;--transition:.3s cubic-bezier(.4,0,.2,1)}
 [data-theme="dark"]{--bg:#0d1117;--bg2:#161b22;--card:#1c2431;--text:#e6edf3;--text2:#b3bcc8;--text3:#7d8fa4;--border:#30363d;--shadow:0 4px 24px rgba(0,0,0,.4);--shadow-lg:0 12px 48px rgba(0,0,0,.5)}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);transition:background var(--transition),color var(--transition);min-height:100vh}
-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--card);border-bottom:1px solid var(--border);z-index:1000;display:flex;align-items:center;padding:0 2rem;gap:1.5rem;backdrop-filter:blur(12px);transition:all var(--transition)}
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--card);border-bottom:1px solid var(--border);z-index:1000;display:flex;align-items:center;padding:0 2.5rem;gap:2rem;backdrop-filter:blur(12px);transition:all var(--transition)}
 nav.scrolled{box-shadow:var(--shadow)}
 .nav-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;flex-shrink:0}
-.nav-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--blue),var(--green));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.1rem;font-family:'Playfair Display',serif}
-.nav-logo-text{font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;color:var(--text);line-height:1.1}
+.nav-logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--blue),var(--green));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.3rem;font-family:'Playfair Display',serif}
+.nav-logo-text{font-family:'Playfair Display',serif;font-weight:700;font-size:1.3rem;color:var(--text);line-height:1.1}
 .nav-logo-text span{display:block;font-size:.65rem;font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
 .nav-links{display:flex;align-items:center;gap:.25rem;margin-left:1rem;flex:1}
-.nav-links a{text-decoration:none;padding:.5rem .85rem;border-radius:8px;font-size:.85rem;font-weight:500;color:var(--text2);transition:all var(--transition);white-space:nowrap}
+.nav-links a{text-decoration:none;padding:.65rem 1.1rem;border-radius:8px;font-size:.93rem;font-weight:500;color:var(--text2);transition:all var(--transition);white-space:nowrap}
 .nav-links a:hover,.nav-links a.active{color:var(--blue);background:rgba(15,117,189,.08)}
 .nav-actions{display:flex;align-items:center;gap:.75rem;margin-left:auto}
 .lang-toggle{display:flex;align-items:center;gap:.25rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.3rem .6rem;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--text2);transition:all var(--transition)}
 .lang-toggle:hover{border-color:var(--blue);color:var(--blue)}
 .theme-btn{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:.95rem;transition:all var(--transition)}
 .theme-btn:hover{border-color:var(--blue);color:var(--blue)}
-.nav-cta{background:var(--blue);color:#fff;padding:.5rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:600;text-decoration:none;transition:all var(--transition);white-space:nowrap}
+.nav-cta{background:var(--blue);color:#fff;padding:.65rem 1.4rem;font-size:.93rem;border-radius:8px;font-weight:600;text-decoration:none;transition:all var(--transition);white-space:nowrap}
 .nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px)}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.5rem;border-radius:8px;background:var(--bg2);border:1px solid var(--border)}
 .hamburger span{width:20px;height:2px;background:var(--text);border-radius:2px;transition:all var(--transition)}
@@ -187,7 +187,7 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
   .product-detail-img{height:260px;width:100%}
 }
 @media(max-width:768px){
-  :root{--nav-h:64px}
+  :root{--nav-h:72px}
   .nav-links,.nav-cta{display:none}
   .hamburger{display:flex}
   .grid-3,.grid-2{grid-template-columns:1fr}
@@ -313,7 +313,7 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
   </div></div>
 
   <div class="features-strip"><div class="container">
-    <div class="feature-item"><i class="fas fa-leaf"></i><span>Pertanian Berkelanjutan</span></div>
+    <div class="feature-item"><i class="fas fa-leaf"></i><span>Agribisnis Berkelanjutan</span></div>
     <div class="feature-item"><i class="fas fa-users"></i><span>Berbasis Komunitas</span></div>
     <div class="feature-item"><i class="fas fa-chart-line"></i><span>Pemberdayaan Ekonomi</span></div>
     <div class="feature-item"><i class="fas fa-handshake"></i><span>Kolaborasi Terbuka</span></div>
