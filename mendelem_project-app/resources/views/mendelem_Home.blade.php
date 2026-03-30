@@ -306,9 +306,9 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
     <div class="stat-item"><div class="stat-num">{{ $stat->value }}{{ $stat->unit }}</div><div class="stat-label" data-en="{{ $stat->label_en }}" data-id="{{ $stat->label_id }}">{{ $stat->label_id }}</div></div>
     @empty
     <div class="stat-item"><div class="stat-num">5+</div><div class="stat-label">Proyek Aktif</div></div>
-    <div class="stat-item"><div class="stat-num">120+</div><div class="stat-label">Anggota</div></div>
-    <div class="stat-item"><div class="stat-num">Rp 500jt</div><div class="stat-label">Pembiayaan</div></div>
-    <div class="stat-item"><div class="stat-num">2019</div><div class="stat-label">Berdiri Sejak</div></div>
+    <div class="stat-item"><div class="stat-num">20+</div><div class="stat-label">Anggota</div></div>
+    <div class="stat-item"><div class="stat-num">180</div><div class="stat-label">Jenis Produk</div></div>
+    <div class="stat-item"><div class="stat-num">2016</div><div class="stat-label">Berdiri Sejak</div></div>
     @endforelse
   </div></div>
 
@@ -583,6 +583,7 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
       <div>
         <div class="section-tag">Sejarah Kami</div><h2 class="section-title">Kisah Mendelem</h2>
         <div class="timeline" style="margin-top:2rem">
+            <div class="timeline-item"><div class="timeline-year">2016</div><div class="timeline-title">Penulisan Project</div><div class="timeline-desc">Ide awal pembuatan Mendelem Project dalam penulisan tesis MENDELEM PROJECT A SOCIAL BUSINESS VENTURE PROJECT.</div></div>
           <div class="timeline-item"><div class="timeline-year">2019</div><div class="timeline-title">Pendirian</div><div class="timeline-desc">Mendelem Project didirikan oleh tokoh komunitas di desa Mendelem, Pemalang, dengan visi memberdayakan ekonomi lokal.</div></div>
           <div class="timeline-item"><div class="timeline-year">2020</div><div class="timeline-title">SAGUM & Ternak Salam</div><div class="timeline-desc">Meluncurkan dua proyek inti pertama — unit agribisnis SAGUM dan program peternakan Ternak Salam.</div></div>
           <div class="timeline-item"><div class="timeline-year">2021</div><div class="timeline-title">Warung Sate Dibuka</div><div class="timeline-desc">Warung Sate diluncurkan sebagai unit kuliner pertama, memanfaatkan ternak dari Ternak Salam.</div></div>
@@ -736,8 +737,8 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
           <div style="width:48px;height:48px;border-radius:12px;background:rgba(140,198,62,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1rem"><i class="fas fa-heart" style="color:var(--green-dark);font-size:1.3rem"></i></div>
           <h3>Donasi</h3>
           <p>Donasi Anda langsung mendukung komunitas di Mendelem. Dana digunakan secara transparan untuk pengembangan proyek.</p>
-          <div class="bank-info"><strong>Bank BRI</strong><span>1234-5678-9012-345</span><br><span>a.n. Mendelem Project</span></div>
-          <div class="bank-info"><strong>Bank Syariah Indonesia (BSI)</strong><span>7890-1234-567</span><br><span>a.n. Mendelem Project</span></div>
+          <div class="bank-info"><strong>Bank BSI</strong><span>7261453217</span><br><span>a.n. SMP ALAM GUNUNG MENDELEM</span></div>
+          <!--<div class="bank-info"><strong>Bank Syariah Indonesia (BSI)</strong><span>7890-1234-567</span><br><span>a.n. Mendelem Project</span></div>-->
           <div class="bank-info"><strong>Konfirmasi Transfer</strong><span>Kirim bukti ke: mendelemproject@gmail.com</span></div>
         </div>
       </div>
