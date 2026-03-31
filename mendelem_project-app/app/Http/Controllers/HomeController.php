@@ -25,6 +25,7 @@ class HomeController extends Controller
             'team'        => TeamMember::where('is_active',1)->orderBy('order')->get(),
             'financing'   => Statistic::where('group','financing')->orderBy('order')->get(),
             'fundSrc'     => Statistic::where('group','funding_source')->orderBy('order')->get(),
+            'allKurban' => \App\Models\KurbanAnimal::active()->tersedia()->limit(4)->get(),
         ];
     }
 

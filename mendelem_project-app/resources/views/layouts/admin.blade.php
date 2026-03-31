@@ -195,6 +195,10 @@ select.form-control{cursor:pointer}
     <a href="{{ route('admin.products.index') }}" class="nav-item {{ request()->routeIs('admin.products*') ? 'active' : '' }}">
       <i class="fas fa-store"></i> Produk
     </a>
+    <a href="{{ route('admin.kurban.index') }}"class="nav-item {{ request()->routeIs('admin.kurban*') ? 'active' : '' }}">
+  <span class="nav-icon">🐐</span>
+  <span class="nav-label">Kambing Kurban</span>
+</a>
     <a href="{{ route('admin.articles.index') }}" class="nav-item {{ request()->routeIs('admin.articles*') ? 'active' : '' }}">
       <i class="fas fa-newspaper"></i> Artikel
     </a>

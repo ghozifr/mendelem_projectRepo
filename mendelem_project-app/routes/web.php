@@ -14,6 +14,9 @@ use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\TranslateController;
+use App\Http\Controllers\KurbanPublicController;
+use App\Http\Controllers\Admin\KurbanController;
+
 
 // PUBLIC PAGES WITH THEIR OWN URLs
 Route::get('/',         [HomeController::class, 'index'])->name('home');
@@ -28,6 +31,25 @@ Route::get('/dukungan', [HomeController::class, 'page'])->defaults('pageName','s
 // PRODUCT DETAIL
 Route::get('/produk/{product}',       [HomeController::class, 'productDetail'])->name('product.detail');
 Route::post('/produk/{product}/pesan',[HomeController::class, 'productInquiry'])->name('product.inquiry')->middleware('throttle:10,1');
+
+ // PUBLIC: Halaman Kambing Kurban
+Route::get('/kurban',         [KurbanPublicController::class, 'index'])->name('kurban.index');
+Route::get('/kurban/{animal}',[KurbanPublicController::class, 'show'])->name('kurban.show');
+
+// ADMIN: Kelola Kambing Kurban (di dalam group middleware auth+admin)
+// Tambahkan di dalam Route::middleware(['auth','admin'])->group(...)
+// Route::resource('kurban', KurbanController::class)->names([
+//     'index'   => 'admin.kurban.index',
+//     'create'  => 'admin.kurban.create',
+//     'store'   => 'admin.kurban.store',
+//     'edit'    => 'admin.kurban.edit',
+//     'update'  => 'admin.kurban.update',
+//     'destroy' => 'admin.kurban.destroy',
+// ]);
+// Route::delete('kurban/{kurban}/thumbnail',    [KurbanController::class, 'deleteThumbnail'])->name('admin.kurban.thumbnail.delete');
+// Route::post('kurban/{kurban}/media',          [KurbanController::class, 'uploadMedia'])->name('admin.kurban.media.upload');
+// Route::delete('kurban/{kurban}/media/{index}',[KurbanController::class, 'deleteMedia'])->name('admin.kurban.media.delete');
+
 
 // ARTICLE DETAIL
 Route::get('/artikel/{article:slug}', [HomeController::class, 'articleDetail'])->name('article.detail');
@@ -56,6 +78,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('products/{product}/gallery',           [AdminProductController::class, 'uploadGallery'])->name('products.gallery.upload');
         Route::delete('products/{product}/gallery/{index}', [AdminProductController::class, 'deleteGallery'])->name('products.gallery.delete');
         Route::delete('products/{product}/thumbnail',       [AdminProductController::class, 'deleteThumbnail'])->name('products.thumbnail.delete');
+
+Route::resource('kurban', KurbanController::class)->names([
+    'index'   => 'kurban.index',
+    'create'  => 'kurban.create',
+    'store'   => 'kurban.store',
+    'edit'    => 'kurban.edit',
+    'update'  => 'kurban.update',
+    'destroy' => 'kurban.destroy',
+]);
+Route::delete('kurban/{kurban}/thumbnail',     [KurbanController::class, 'deleteThumbnail'])->name('kurban.thumbnail.delete');
+Route::post('kurban/{kurban}/media',           [KurbanController::class, 'uploadMedia'])->name('kurban.media.upload');
+Route::delete('kurban/{kurban}/media/{index}', [KurbanController::class, 'deleteMedia'])->name('kurban.media.delete');
 
         Route::resource('articles', AdminArticleController::class);
         Route::post('articles/{article}/publish',     [AdminArticleController::class, 'publish'])->name('articles.publish');
