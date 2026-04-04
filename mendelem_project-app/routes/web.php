@@ -106,6 +106,8 @@ Route::delete('kurban/{kurban}/media/{index}', [KurbanController::class, 'delete
         Route::get('settings',        [SettingController::class, 'index'])->name('settings.index');
         Route::post('settings',       [SettingController::class, 'update'])->name('settings.update');
         Route::post('settings/logo',  [SettingController::class, 'uploadLogo'])->name('settings.logo');
+        Route::delete('settings/logo', [SettingController::class, 'deleteLogo'])
+     ->name('settings.logo.delete');
 
         Route::get('messages',                      [MessageController::class, 'index'])->name('messages.index');
         Route::get('messages/{message}',            [MessageController::class, 'show'])->name('messages.show');

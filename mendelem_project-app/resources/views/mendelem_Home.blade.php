@@ -224,9 +224,22 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
 
 <!-- ===== NAVBAR ===== -->
 <nav id="navbar">
+  @php
+    $siteLogo    = \App\Models\SiteSetting::where('key','site_logo')->value('value');
+    $siteName    = \App\Models\SiteSetting::where('key','site_name')->value('value') ?? 'Mendelem Project';
+    $siteTagline = \App\Models\SiteSetting::where('key','site_tagline')->value('value') ?? 'Pemalang, Jawa Tengah';
+  @endphp
   <a class="nav-logo" href="{{ route('home') }}">
-    <div class="nav-logo-icon">M</div>
-    <div class="nav-logo-text">Mendelem Project<span>Pemalang, Jawa Tengah</span></div>
+    <div class="nav-logo-icon">
+      @if($siteLogo)
+        <img src="{{ asset('storage/'.$siteLogo) }}"
+             style="width:100%;height:100%;object-fit:contain;border-radius:10px;padding:2px"
+             alt="{{ $siteName }}">
+      @else
+        M
+      @endif
+    </div>
+    <div class="nav-logo-text">{{ $siteName }}<span>{{ $siteTagline }}</span></div>
   </a>
   <div class="nav-links" id="navLinks">
     <a href="{{ route('home') }}" class="{{ $activePage==='home'?'active':'' }}" data-en="Home" data-id="Beranda">Beranda</a>
@@ -1269,10 +1282,15 @@ function filterKurban(jenis) {
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="nav-logo" style="margin-bottom:.75rem">
-          <div class="nav-logo-icon">M</div>
-          <div class="nav-logo-text" style="margin-left:.75rem">Mendelem Project<span>Pemalang, Jawa Tengah</span></div>
-        </div>
+        <div class="nav-logo-icon" style="background:linear-gradient(135deg,var(--blue),var(--green))">
+    @if(isset($siteLogo) && $siteLogo)
+      <img src="{{ asset('storage/'.$siteLogo) }}"
+           style="width:100%;height:100%;object-fit:contain;border-radius:10px;padding:2px"
+           alt="{{ $siteName ?? 'Mendelem Project' }}">
+    @else
+      M
+    @endif
+  </div>
         <p class="footer-desc">Pengembangan agribisnis berbasis komunitas di desa Mendelem, Pemalang, Jawa Tengah. Membangun mata pencaharian pedesaan berkelanjutan sejak 2019.</p>
         <div class="footer-social">
           <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
