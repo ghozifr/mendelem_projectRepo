@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\TranslateController;
 use App\Http\Controllers\KurbanPublicController;
 use App\Http\Controllers\Admin\KurbanController;
+use App\Http\Controllers\SocialMediaPublicController;
+use App\Http\Controllers\Admin\SocialMediaController;
 
 
 // PUBLIC PAGES WITH THEIR OWN URLs
@@ -49,6 +51,9 @@ Route::get('/kurban/{animal}',[KurbanPublicController::class, 'show'])->name('ku
 // Route::delete('kurban/{kurban}/thumbnail',    [KurbanController::class, 'deleteThumbnail'])->name('admin.kurban.thumbnail.delete');
 // Route::post('kurban/{kurban}/media',          [KurbanController::class, 'uploadMedia'])->name('admin.kurban.media.upload');
 // Route::delete('kurban/{kurban}/media/{index}',[KurbanController::class, 'deleteMedia'])->name('admin.kurban.media.delete');
+
+// SOCIAL MEDIA DETAIL
+Route::get('/sosmed/{sosmed}', [SocialMediaPublicController::class, 'show'])->name('sosmed.show');
 
 
 // ARTICLE DETAIL
@@ -90,6 +95,18 @@ Route::resource('kurban', KurbanController::class)->names([
 Route::delete('kurban/{kurban}/thumbnail',     [KurbanController::class, 'deleteThumbnail'])->name('kurban.thumbnail.delete');
 Route::post('kurban/{kurban}/media',           [KurbanController::class, 'uploadMedia'])->name('kurban.media.upload');
 Route::delete('kurban/{kurban}/media/{index}', [KurbanController::class, 'deleteMedia'])->name('kurban.media.delete');
+
+Route::resource('sosmed', SocialMediaController::class)->names([
+    'index'   => 'sosmed.index',
+    'create'  => 'sosmed.create',
+    'store'   => 'sosmed.store',
+    'edit'    => 'sosmed.edit',
+    'update'  => 'sosmed.update',
+    'destroy' => 'sosmed.destroy',
+]);
+Route::delete('sosmed/{sosmed}/thumbnail',        [SocialMediaController::class, 'deleteThumbnail'])->name('sosmed.thumbnail.delete');
+Route::post('sosmed/{sosmed}/preview',            [SocialMediaController::class, 'uploadPreview'])->name('sosmed.preview.upload');
+Route::delete('sosmed/{sosmed}/preview/{index}',  [SocialMediaController::class, 'deletePreview'])->name('sosmed.preview.delete');
 
         Route::resource('articles', AdminArticleController::class);
         Route::post('articles/{article}/publish',     [AdminArticleController::class, 'publish'])->name('articles.publish');

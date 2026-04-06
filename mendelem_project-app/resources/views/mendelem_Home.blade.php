@@ -340,6 +340,55 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
     <div class="feature-item"><i class="fas fa-shield-alt"></i><span>Terpercaya & Transparan</span></div>
   </div></div>
 
+  {{-- ===== SOCIAL MEDIA STRIP ===== --}}
+  @if(isset($socialMedia) && $socialMedia->count())
+  <section style="padding:3.5rem 2rem;background:var(--bg2)">
+    <div class="container">
+      <div class="section-header center" style="margin-bottom:2rem">
+        <div class="section-tag" data-en="Follow Us" data-id="Ikuti Kami">Ikuti Kami</div>
+        <h2 class="section-title" data-en="Our Social Media" data-id="Social Media Kami">Social Media Kami</h2>
+        <p class="section-subtitle" data-en="Follow our activities on various platforms." data-id="Ikuti kegiatan kami di berbagai platform.">Ikuti kegiatan kami di berbagai platform.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem">
+        @foreach($socialMedia as $sm)
+        <a href="{{ route('sosmed.show',$sm) }}"
+           style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all var(--transition);display:block"
+           onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.12)';this.style.borderColor='{{ $sm->platform_color }}'"
+           onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--border)'">
+
+          {{-- Cover Image --}}
+          <div style="height:120px;background:{{ $sm->platform_color }}22;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative">
+            @if($sm->thumbnail)
+              <img src="{{ asset('storage/'.$sm->thumbnail) }}" style="width:100%;height:100%;object-fit:cover" alt="{{ $sm->name }}">
+              <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.5))"></div>
+            @else
+              <i class="{{ $sm->platform_icon }}" style="font-size:3.5rem;color:{{ $sm->platform_color }};opacity:.35"></i>
+            @endif
+            {{-- Platform icon badge --}}
+            <div style="position:absolute;top:.6rem;right:.6rem;width:32px;height:32px;border-radius:8px;background:{{ $sm->platform_color }};display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2)">
+              <i class="{{ $sm->platform_icon }}" style="font-size:.9rem;color:#fff"></i>
+            </div>
+          </div>
+
+          {{-- Info --}}
+          <div style="padding:1rem">
+            <div style="font-weight:700;font-size:.92rem;color:var(--text);margin-bottom:.2rem">{{ $sm->name }}</div>
+            <div style="font-size:.75rem;color:var(--text3);margin-bottom:.5rem">{{ ucfirst($sm->platform) }}</div>
+            @if($sm->description)
+            <div style="font-size:.78rem;color:var(--text2);line-height:1.5">{{ Str::limit($sm->description,60) }}</div>
+            @endif
+            <div style="margin-top:.75rem;display:flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:600;color:{{ $sm->platform_color }}">
+              <span data-en="View Profile" data-id="Lihat Profil">Lihat Profil</span>
+              <i class="fas fa-arrow-right" style="font-size:.65rem"></i>
+            </div>
+          </div>
+        </a>
+        @endforeach
+      </div>
+    </div>
+  </section>
+  @endif
+
   <section><div class="container">
     <div class="section-header"><div class="section-tag">Proyek Kami</div><h2 class="section-title">Apa yang Kami Bangun Bersama</h2></div>
     <div class="grid-3">
@@ -1277,6 +1326,120 @@ function filterKurban(jenis) {
 }
 </script>
 
+@if($activePage==='sosmed-detail' && isset($activeSosmed))
+@php $sm = $activeSosmed; @endphp
+<div id="page-sosmed-detail" class="page active">
+
+  {{-- Breadcrumb --}}
+  <div style="background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2rem">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="{{ route('home') }}">Beranda</a>
+        <i class="fas fa-chevron-right"></i>
+        <span>{{ $sm->name }}</span>
+      </div>
+    </div>
+  </div>
+
+  {{-- Hero --}}
+  <div style="background:linear-gradient(135deg,{{ $sm->platform_color }}dd,{{ $sm->platform_color }});padding:3rem 2rem;color:#fff">
+    <div class="container">
+      <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap">
+        <div style="width:80px;height:80px;border-radius:20px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+          @if($sm->thumbnail)
+            <img src="{{ asset('storage/'.$sm->thumbnail) }}" style="width:100%;height:100%;object-fit:cover" alt="">
+          @else
+            <i class="{{ $sm->platform_icon }}" style="font-size:2.5rem;color:#fff"></i>
+          @endif
+        </div>
+        <div>
+          <div style="display:inline-block;background:rgba(255,255,255,.2);padding:.2rem .8rem;border-radius:99px;font-size:.75rem;font-weight:700;margin-bottom:.5rem">{{ ucfirst($sm->platform) }}</div>
+          <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;margin-bottom:.4rem">{{ $sm->name }}</h1>
+          @if($sm->description)<p style="opacity:.9;font-size:.95rem;line-height:1.6;max-width:520px">{{ $sm->description }}</p>@endif
+        </div>
+        <div style="margin-left:auto">
+          <a href="{{ $sm->url }}" target="_blank" rel="noopener noreferrer"
+             style="display:inline-flex;align-items:center;gap:.6rem;background:rgba(255,255,255,.2);color:#fff;padding:.85rem 1.75rem;border-radius:12px;font-weight:700;text-decoration:none;border:2px solid rgba(255,255,255,.5);transition:all .2s;font-size:.95rem"
+             onmouseover="this.style.background='rgba(255,255,255,.35)'" onmouseout="this.style.background='rgba(255,255,255,.2)'">
+            <i class="{{ $sm->platform_icon }}"></i>
+            <span data-en="Visit Profile" data-id="Kunjungi Profil">Kunjungi Profil</span>
+            <i class="fas fa-external-link-alt" style="font-size:.75rem"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- Preview Grid --}}
+  <section><div class="container">
+    @if($sm->previews && count($sm->previews))
+    <div style="margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <h2 class="section-title" style="margin-bottom:0" data-en="Content Preview" data-id="Pratinjau Konten">Pratinjau Konten</h2>
+      <a href="{{ $sm->url }}" target="_blank" rel="noopener noreferrer"
+         style="display:inline-flex;align-items:center;gap:.5rem;background:{{ $sm->platform_color }};color:#fff;padding:.6rem 1.3rem;border-radius:10px;font-weight:700;text-decoration:none;font-size:.88rem">
+        <i class="{{ $sm->platform_icon }}"></i>
+        <span data-en="Follow Us" data-id="Ikuti Kami">Ikuti Kami</span>
+      </a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem">
+      @foreach($sm->previews as $prev)
+      <a href="{{ $prev['link'] ?? $sm->url }}" target="_blank" rel="noopener noreferrer"
+         style="text-decoration:none;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--card);transition:all .25s;display:block;group"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.12)';this.style.borderColor='{{ $sm->platform_color }}'"
+         onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--border)'">
+        <div style="aspect-ratio:1;overflow:hidden;background:var(--bg2);position:relative">
+          <img src="{{ asset('storage/'.$prev['image']) }}" style="width:100%;height:100%;object-fit:cover;transition:transform .3s" alt="{{ $prev['caption'] ?? '' }}"
+               onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,0);transition:.2s;display:flex;align-items:center;justify-content:center"
+               onmouseover="this.style.background='rgba(0,0,0,.3)'" onmouseout="this.style.background='rgba(0,0,0,0)'">
+            <div style="background:{{ $sm->platform_color }};color:#fff;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:.2s"
+                 onmouseover="this.style.opacity='1';this.parentElement.style.background='rgba(0,0,0,.3)'" onmouseout="this.style.opacity='0';this.parentElement.style.background='rgba(0,0,0,0)'">
+              <i class="fas fa-external-link-alt"></i>
+            </div>
+          </div>
+        </div>
+        @if(!empty($prev['caption']))
+        <div style="padding:.75rem 1rem;font-size:.82rem;color:var(--text2);line-height:1.5">{{ $prev['caption'] }}</div>
+        @endif
+      </a>
+      @endforeach
+    </div>
+    @else
+    <div style="text-align:center;padding:4rem;color:var(--text3)">
+      <i class="{{ $sm->platform_icon }}" style="font-size:4rem;opacity:.2;display:block;margin-bottom:1rem;color:{{ $sm->platform_color }}"></i>
+      <p style="margin-bottom:1.5rem" data-en="No preview yet. Visit the profile directly." data-id="Belum ada preview. Kunjungi profil langsung.">Belum ada preview. Kunjungi profil langsung.</p>
+      <a href="{{ $sm->url }}" target="_blank"
+         style="display:inline-flex;align-items:center;gap:.5rem;background:{{ $sm->platform_color }};color:#fff;padding:.75rem 1.75rem;border-radius:10px;font-weight:700;text-decoration:none">
+        <i class="{{ $sm->platform_icon }}"></i>
+        <span>{{ $sm->name }}</span>
+        <i class="fas fa-external-link-alt" style="font-size:.75rem"></i>
+      </a>
+    </div>
+    @endif
+  </div></section>
+
+  {{-- Sosmed lain --}}
+  @if(isset($socialMedia) && $socialMedia->where('id','!=',$sm->id)->count())
+  <section style="background:var(--bg2);padding:3rem 2rem"><div class="container">
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;margin-bottom:1.25rem" data-en="Our Other Accounts" data-id="Akun Lainnya">Akun Lainnya</h2>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap">
+      @foreach($socialMedia->where('id','!=',$sm->id) as $other)
+      <a href="{{ route('sosmed.show',$other) }}"
+         style="display:inline-flex;align-items:center;gap:.6rem;padding:.6rem 1.1rem;border-radius:10px;border:1px solid var(--border);background:var(--card);text-decoration:none;color:var(--text);font-size:.85rem;font-weight:600;transition:all .2s"
+         onmouseover="this.style.borderColor='{{ $other->platform_color }}';this.style.color='{{ $other->platform_color }}'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
+        <i class="{{ $other->platform_icon }}" style="color:{{ $other->platform_color }}"></i>
+        {{ $other->name }}
+      </a>
+      @endforeach
+    </div>
+  </div></section>
+  @endif
+
+</div>
+@endif
+{{-- /page-sosmed-detail --}}
+
 {{-- ==================== FOOTER ==================== --}}
 <footer>
   <div class="container">
@@ -1364,12 +1527,42 @@ let slideInterval;
  */
 
 const translations = {
-  // PAGE HEROES
+  // NAVBAR
+  'Beranda': 'Home', 'Proyek': 'Projects', 'Produk': 'Products',
+  'Galeri': 'Gallery', 'Artikel': 'Articles', 'Tentang Kami': 'About Us',
+  'Lokasi': 'Location', 'Dukung Kami': 'Support Us',
+
+  // FEATURES STRIP
+  'Agribisnis Berkelanjutan': 'Sustainable Agribusiness',
+  'Berbasis Komunitas': 'Community Based',
+  'Pemberdayaan Ekonomi': 'Economic Empowerment',
+  'Kolaborasi Terbuka': 'Open Collaboration',
+  'Terpercaya & Transparan': 'Trusted & Transparent',
+
+  // HOME PAGE SECTIONS
   'Proyek Kami': 'Our Projects',
-  'Program agribisnis komunitas untuk pemberdayaan ekonomi desa Mendelem.': 'Community agribusiness programs for economic empowerment of Mendelem village.',
+  'Apa yang Kami Bangun Bersama': 'What We Build Together',
   'Produk Kami': 'Our Products',
+  'Segar dari Desa Mendelem': 'Fresh from Mendelem Village',
+  'Artikel Terbaru': 'Latest Articles',
+  'Berita & Kabar Terbaru': 'Latest News & Updates',
+  'Semua Artikel': 'All Articles',
+  'Lihat Semua Produk': 'View All Products',
+  'Selengkapnya': 'Read More',
+
+  // SOCIAL MEDIA
+  'Social Media Kami': 'Our Social Media',
+  'Ikuti kegiatan kami di berbagai platform.': 'Follow our activities on various platforms.',
+  'Lihat Profil': 'View Profile',
+  'Kunjungi Profil': 'Visit Profile',
+  'Pratinjau Konten': 'Content Preview',
+  'Ikuti Kami': 'Follow Us',
+  'Belum ada preview. Kunjungi profil langsung.': 'No preview yet. Visit the profile directly.',
+  'Akun Lainnya': 'Our Other Accounts',
+
+  // PAGE HEROES
+  'Program agribisnis komunitas untuk pemberdayaan ekonomi desa Mendelem.': 'Community agribusiness programs for economic empowerment of Mendelem village.',
   'Produk berkualitas langsung dari komunitas desa Mendelem.': 'Quality products directly from the Mendelem village community.',
-  'Galeri': 'Gallery',
   'Dokumentasi visual kegiatan dan proyek komunitas Mendelem.': 'Visual documentation of Mendelem community activities and projects.',
   'Tentang Mendelem Project': 'About Mendelem Project',
   'Sejarah, visi, tim, dan statistik pembiayaan kami.': 'Our history, vision, team, and financing statistics.',
@@ -1377,36 +1570,36 @@ const translations = {
   'Berita terbaru, laporan kegiatan, dan informasi dari komunitas Mendelem.': 'Latest news, activity reports, and information from the Mendelem community.',
   'Lokasi Kami': 'Our Location',
   'Temukan kami di Jl. Belik - Mendelem KM 3, Pemalang.': 'Find us at Jl. Belik - Mendelem KM 3, Pemalang.',
-  'Dukung Kami': 'Support Us',
   'Bantu kami mengembangkan Mendelem Project melalui kolaborasi atau donasi.': 'Help us grow Mendelem Project through collaboration or donation.',
   'Kambing Kurban': 'Qurban Animals',
   'Hewan kurban pilihan dari peternakan komunitas Mendelem — sehat, terpercaya, siap kurban.': 'Choice sacrificial animals from Mendelem community farm — healthy, trusted, ready for qurban.',
 
-  // SECTION HEADERS & TITLES
-  'Apa yang Kami Bangun Bersama': 'What We Build Together',
-  'Segar dari Desa Mendelem': 'Fresh from Mendelem Village',
-  'Berita & Kabar Terbaru': 'Latest News & Updates',
+  // ABOUT / TIMELINE
   'Sejarah Kami': 'Our History',
   'Kisah Mendelem': 'The Mendelem Story',
+  'Penulisan Project': 'Project Writing',
+  'Pendirian': 'Founding',
+  'Warung Sate Dibuka': 'Warung Sate Opened',
+  'Budidaya Melon Dimulai': 'Melon Cultivation Started',
+  'CIS Digitex Diluncurkan': 'CIS Digitex Launched',
+  'Ekspansi & Pertumbuhan': 'Expansion & Growth',
+  'Semua proyek berjalan penuh dengan komunitas yang terus berkembang.': 'All projects running at full capacity with a growing community.',
   'Visi & Misi': 'Vision & Mission',
   'Apa yang Mendorong Kami': 'What Drives Us',
+  'Visi Kami': 'Our Vision',
+  'Misi Kami': 'Our Mission',
+  'Menjadi model agribisnis berbasis komunitas yang memberdayakan mata pencaharian pedesaan dan kemandirian ekonomi berkelanjutan di Mendelem dan sekitarnya.': 'To become a community-based agribusiness model that empowers rural livelihoods and sustainable economic independence in Mendelem and surrounding areas.',
+  'Mengembangkan proyek agribisnis berkelanjutan.': 'Develop sustainable agribusiness projects.',
+  'Memberikan pelatihan keterampilan bagi anggota.': 'Provide skills training for members.',
+  'Sistem keuangan transparan & akuntabel.': 'Transparent & accountable financial system.',
+  'Membangun kemitraan luas.': 'Build broad partnerships.',
+  'Memanfaatkan teknologi modern.': 'Utilize modern technology.',
   'Tim Kami': 'Our Team',
   'Kenali Orang-orang di Balik Proyek': 'Meet the People Behind the Project',
   'Statistik Pembiayaan': 'Financing Statistics',
   'Transparansi Keuangan': 'Financial Transparency',
   'Alokasi Pembiayaan Proyek': 'Project Financing Allocation',
   'Sumber Dana': 'Funding Sources',
-
-  // ABOUT / TIMELINE
-  'Penulisan Project': 'Project Writing',
-  'Pendirian': 'Founding',
-  'Ekspansi & Pertumbuhan': 'Expansion & Growth',
-  'Semua proyek berjalan penuh dengan komunitas yang terus berkembang.': 'All projects running at full capacity with a growing community.',
-
-  // VISION MISSION
-  'Visi Kami': 'Our Vision',
-  'Misi Kami': 'Our Mission',
-  'Menjadi model agribisnis berbasis komunitas yang memberdayakan mata pencaharian pedesaan dan kemandirian ekonomi berkelanjutan di Mendelem dan sekitarnya.': 'To become a community-based agribusiness model that empowers rural livelihoods and sustainable economic independence in Mendelem and surrounding areas.',
 
   // LOCATION PAGE
   'Alamat': 'Address',
@@ -1418,16 +1611,24 @@ const translations = {
   // SUPPORT PAGE
   'Kolaborasi': 'Collaboration',
   'Kami terbuka untuk berkolaborasi dengan LSM, pemerintah, perusahaan, dan individu yang berbagi visi pemberdayaan pedesaan kami.': 'We are open to collaborating with NGOs, governments, companies, and individuals who share our vision of rural empowerment.',
+  'Bantuan teknis & pelatihan': 'Technical assistance & training',
+  'Penyediaan teknologi pertanian': 'Agricultural technology provision',
+  'Akses pasar & distribusi': 'Market access & distribution',
+  'Kemitraan penelitian & pengembangan': 'Research & development partnerships',
+  'Program CSR': 'CSR Programs',
+  'Hubungi untuk Kolaborasi': 'Contact for Collaboration',
   'Donasi': 'Donation',
   'Donasi Anda langsung mendukung komunitas di Mendelem. Dana digunakan secara transparan untuk pengembangan proyek.': 'Your donation directly supports the Mendelem community. Funds are used transparently for project development.',
   'Konfirmasi Transfer': 'Transfer Confirmation',
+  'Kirim bukti ke: mendelemproject@gmail.com': 'Send proof to: mendelemproject@gmail.com',
   'Hubungi Kami': 'Contact Us',
   'Isi formulir di bawah dan kami akan merespons sesegera mungkin.': 'Fill in the form below and we will respond as soon as possible.',
 
-  // FORM LABELS
-  'Nama Lengkap': 'Full Name',
+  // FORMS
   'Nama Lengkap *': 'Full Name *',
+  'Nama Lengkap': 'Full Name',
   'Nama': 'Name',
+  'Email': 'Email',
   'Email *': 'Email *',
   'No. WhatsApp': 'WhatsApp Number',
   'Tujuan': 'Purpose',
@@ -1435,13 +1636,13 @@ const translations = {
   'Pembelian Produk': 'Product Purchase',
   'Pertanyaan Umum': 'General Inquiry',
   'Pesan *': 'Message *',
+  'Pesan / Pertanyaan *': 'Message / Question *',
   'Jelaskan maksud Anda...': 'Explain your intention...',
   'Kirim Pesan': 'Send Message',
+  'Nama Anda': 'Your Name',
+  'Tulis pesan...': 'Write a message...',
 
   // BUTTONS & LINKS
-  'Semua Artikel': 'All Articles',
-  'Selengkapnya': 'Read More',
-  'Lihat Semua Produk': 'View All Products',
   'Lihat Detail': 'View Detail',
   'Lihat & Pesan': 'View & Order',
   'Baca Selengkapnya': 'Read More',
@@ -1450,28 +1651,25 @@ const translations = {
   'Kirim Pesan / Pesan Sekarang': 'Send Message / Order Now',
   'Chat WhatsApp': 'WhatsApp Chat',
   'Kirim Pesan / Pemesanan': 'Send Message / Order',
-  'Hubungi untuk Kolaborasi': 'Contact for Collaboration',
+  'Lihat Semua': 'View All',
 
   // PRODUCT DETAIL
+  'Foto Produk': 'Product Photos',
   'Informasi Produk': 'Product Information',
   'Kategori': 'Category',
   'Ketersediaan': 'Availability',
   'Harga': 'Price',
   'Satuan': 'Unit',
-  'Harga dapat berubah sewaktu-waktu. Hubungi kami untuk konfirmasi harga terkini.': 'Prices may change at any time. Contact us to confirm the latest price.',
+  'Harga dapat berubah sewaktu-waktu. Hubungi kami untuk konfirmasi harga terkini.': 'Prices may change. Contact us to confirm the latest price.',
   'Produk Lainnya': 'Other Products',
   'Jumlah yang Diinginkan': 'Desired Quantity',
-  'Pesan / Pertanyaan *': 'Message / Question *',
   'Tulis pesan atau pertanyaan Anda di sini...': 'Write your message or question here...',
-  'Tersedia Sekarang': 'Available Now',
 
   // FOOTER
   'Navigasi': 'Navigation',
-  'Proyek': 'Projects',
-  'Produk': 'Products',
-  'Tentang Kami': 'About Us',
   'Kontak': 'Contact',
   'Hak cipta dilindungi.': 'All rights reserved.',
+  'Pengembangan agribisnis berbasis komunitas di desa Mendelem, Pemalang, Jawa Tengah. Membangun mata pencaharian pedesaan berkelanjutan sejak 2019.': 'Community-based agribusiness development in Mendelem village, Pemalang, Central Java. Building sustainable rural livelihoods since 2019.',
 
   // EMPTY STATES
   'Belum ada proyek.': 'No projects yet.',
@@ -1482,10 +1680,15 @@ const translations = {
   'Belum ada anggota tim.': 'No team members yet.',
   'Belum ada data pembiayaan.': 'No financing data yet.',
   'Belum ada data sumber dana.': 'No funding source data yet.',
+  'Upload media di admin panel': 'Upload media in admin panel',
+  'Tambahkan slider di Admin Panel': 'Add slider in Admin Panel',
+  'Foto Artikel': 'Article Photo',
 
   // KURBAN
+  'Kambing & Domba Kurban': 'Qurban Goats & Sheep',
+  'Hewan kurban pilihan dari peternakan komunitas Mendelem': 'Choice qurban animals from Mendelem community farm',
   'Segera Hadir': 'Coming Soon',
-  'Daftar hewan kurban akan segera tersedia. Hubungi kami untuk informasi lebih lanjut.': 'The list of qurban animals will be available soon. Contact us for more information.',
+  'Daftar hewan kurban akan segera tersedia. Hubungi kami untuk informasi lebih lanjut.': 'The list of qurban animals will be available soon.',
   'Ingin Memesan atau Ada Pertanyaan?': 'Want to Order or Have Questions?',
   'Tim kami siap membantu Anda memilih hewan kurban terbaik.': 'Our team is ready to help you choose the best qurban animal.',
   'Chat WhatsApp Sekarang': 'Chat WhatsApp Now',
@@ -1497,16 +1700,72 @@ const translations = {
   'Umur': 'Age',
   'Catatan': 'Notes',
   'Hubungi via WhatsApp': 'Contact via WhatsApp',
+  'Kirim Pesan / Pemesanan': 'Send Message / Order',
   'Sedang Dipesan': 'Currently Reserved',
   'Sudah Terjual': 'Already Sold',
-  'Lainnya': 'Others',
+  'Lihat hewan lain yang tersedia': 'View other available animals',
   'Lihat Semua Hewan Kurban': 'View All Qurban Animals',
   'Pemesanan': 'Order',
   'Formulir Pemesanan': 'Order Form',
-  'Isi formulir di bawah, kami akan menghubungi Anda segera untuk konfirmasi.': 'Fill in the form below, we will contact you soon for confirmation.',
-  'Pesan terkirim! Kami akan segera menghubungi Anda via WhatsApp atau Email.': 'Message sent! We will contact you soon via WhatsApp or Email.',
-  'Pesan terkirim! Kami akan segera menghubungi Anda.': 'Message sent! We will contact you soon.',
+  'Isi formulir di bawah, kami akan menghubungi Anda segera untuk konfirmasi.': 'Fill in the form below, we will contact you soon.',
+  'Hubungi Kami untuk Pemesanan': 'Contact Us to Order',
+  'Hewan Lainnya': 'Other Animals',
+
+  // MISC
+  'Beranda': 'Home',
+  'kali dibaca': 'views',
+  'Semua Artikel': 'All Articles',
+  'Semua': 'All',
+  'Kambing': 'Goat',
+  'Domba': 'Sheep',
+  'Jantan': 'Male',
+  'Betina': 'Female',
+  'Tersedia': 'Available',
+  'Musiman': 'Seasonal',
+  'Habis': 'Out of Stock',
 };
+
+const translationsReverse = Object.fromEntries(
+  Object.entries(translations).map(([id, en]) => [en, id])
+);
+
+function toggleLang() {
+  currentLang = currentLang === 'id' ? 'en' : 'id';
+  document.getElementById('langLabel').textContent = currentLang === 'id' ? 'EN' : 'ID';
+
+  // 1. Attribute-based (data-en / data-id)
+  document.querySelectorAll('[data-en][data-id]').forEach(el => {
+    const val = currentLang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-id');
+    if (val) el.textContent = val;
+  });
+
+  // 2. Dictionary-based (teks hardcoded)
+  const dict = currentLang === 'en' ? translations : translationsReverse;
+  translateTextNodes(document.body, dict);
+}
+
+function translateTextNodes(root, dict) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent) return NodeFilter.FILTER_REJECT;
+      const tag = parent.tagName.toLowerCase();
+      if (['script','style','input','textarea','select','option'].includes(tag)) return NodeFilter.FILTER_REJECT;
+      if (parent.hasAttribute('data-en') || parent.hasAttribute('data-id')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  nodes.forEach(node => {
+    const trimmed = node.textContent.trim();
+    if (trimmed && dict[trimmed]) {
+      node.textContent = node.textContent.replace(trimmed, dict[trimmed]);
+    }
+  });
+}
 
 // Reverse map for EN->ID
 const translationsReverse = Object.fromEntries(

@@ -199,6 +199,11 @@ select.form-control{cursor:pointer}
   <span class="nav-icon">🐐</span>
   <span class="nav-label">Kambing Kurban</span>
 </a>
+<a href="{{ route('admin.sosmed.index') }}"
+   class="nav-item {{ request()->routeIs('admin.sosmed*') ? 'active' : '' }}">
+  <span class="nav-icon">📱</span>
+  <span class="nav-label">Social Media</span>
+</a>
     <a href="{{ route('admin.articles.index') }}" class="nav-item {{ request()->routeIs('admin.articles*') ? 'active' : '' }}">
       <i class="fas fa-newspaper"></i> Artikel
     </a>
