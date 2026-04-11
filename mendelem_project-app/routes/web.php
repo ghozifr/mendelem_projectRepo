@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\SocialMediaController;
 // PUBLIC PAGES WITH THEIR OWN URLs
 Route::get('/',         [HomeController::class, 'index'])->name('home');
 Route::get('/proyek',   [HomeController::class, 'page'])->defaults('pageName','projects')->name('page.projects');
+Route::get('/proyek/{project}', [HomeController::class, 'projectDetail'])->name('project.detail');
 Route::get('/produk',   [HomeController::class, 'page'])->defaults('pageName','products')->name('page.products');
 Route::get('/galeri',   [HomeController::class, 'page'])->defaults('pageName','gallery')->name('page.gallery');
 Route::get('/tentang',  [HomeController::class, 'page'])->defaults('pageName','about')->name('page.about');

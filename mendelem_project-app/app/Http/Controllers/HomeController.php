@@ -53,6 +53,27 @@ class HomeController extends Controller
         ]));
     }
 
+        /* ─── PROJECT DETAIL (Point 1) ──────────────────────── */
+    public function projectDetail(Project $project)
+{
+    if ($project->status !== 'active') abort(404);
+
+    // Proyek lain selain yang sedang dibuka
+    $otherProjects = Project::where('status', 'active')
+        ->where('id', '!=', $project->id)
+        ->orderBy('order')
+        ->limit(3)
+        ->get();
+
+    return view('mendelem_Home', array_merge($this->sharedData(), [
+        'activePage'    => 'project-detail',
+        'activeProject' => $project,
+        'otherProjects' => $otherProjects,
+        'activeProduct' => null,
+        'activeArticle' => null,
+    ]));
+}
+
     /* ─── PRODUCT DETAIL (Point 2) ──────────────────────── */
     public function productDetail(Product $product)
     {
