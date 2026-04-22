@@ -19,60 +19,59 @@ class KurbanController extends Controller
         return view('admin.kurban.form', ['animal' => null]);
     }
 
-    public function store(Request $r)
+   public function store(Request $r)
     {
         $data = $r->validate([
+            'kode'             => 'nullable|string|max:20|unique:kurban_animals,kode',
+            'grade'            => 'nullable|in:A,B,C,D,E,F,G,H',
             'name'             => 'nullable|string|max:100',
             'jenis_hewan'      => 'required|in:kambing,domba',
             'kelamin'          => 'required|in:jantan,betina',
             'jenis_ras'        => 'nullable|string|max:100',
-            'berat_kg'         => 'nullable|numeric|min:0|max:999',
+            'berat_kg'         => 'nullable|numeric|min:0',
             'umur'             => 'nullable|string|max:50',
             'harga'            => 'required|numeric|min:0',
-            'status'           => 'required|in:tersedia,dipesan,terjual',
-            'order'            => 'nullable|integer|min:0',
+            'catatan'          => 'nullable|string',
             'thumbnail'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'whatsapp_number'  => 'nullable|string|max:20',
-            'catatan'          => 'nullable|string|max:2000',
+            'status'           => 'required|in:tersedia,dipesan,terjual',
         ]);
 
         $data['is_active'] = $r->has('is_active') ? 1 : 0;
-        $data['order']     = $data['order'] ?? 0;
 
         if ($r->hasFile('thumbnail')) {
             $data['thumbnail'] = $r->file('thumbnail')->store('kurban', 'public');
         }
 
-        $animal = KurbanAnimal::create($data);
-
-        return redirect()->route('admin.kurban.index')
-            ->with('success', 'Hewan kurban berhasil ditambahkan!');
+        KurbanAnimal::create($data);
+        return redirect()->route('admin.kurban.index')->with('success', 'Hewan kurban berhasil ditambahkan!');
     }
 
     public function edit(KurbanAnimal $kurban)
-    {
-        return view('admin.kurban.form', ['animal' => $kurban]);
-    }
+{
+    return view('admin.kurban.form', ['animal' => $kurban]);
+}
 
+    // Contoh lengkap method update():
     public function update(Request $r, KurbanAnimal $kurban)
     {
         $data = $r->validate([
+            'kode'             => 'nullable|string|max:20|unique:kurban_animals,kode,'.$kurban->id,
+            'grade'            => 'nullable|in:A,B,C,D,E,F,G',
             'name'             => 'nullable|string|max:100',
             'jenis_hewan'      => 'required|in:kambing,domba',
             'kelamin'          => 'required|in:jantan,betina',
             'jenis_ras'        => 'nullable|string|max:100',
-            'berat_kg'         => 'nullable|numeric|min:0|max:999',
+            'berat_kg'         => 'nullable|numeric|min:0',
             'umur'             => 'nullable|string|max:50',
             'harga'            => 'required|numeric|min:0',
-            'status'           => 'required|in:tersedia,dipesan,terjual',
-            'order'            => 'nullable|integer|min:0',
-            'thumbnail'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'catatan'          => 'nullable|string',
+            'thumbnail'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
             'whatsapp_number'  => 'nullable|string|max:20',
-            'catatan'          => 'nullable|string|max:2000',
+            'status'           => 'required|in:tersedia,dipesan,terjual',
         ]);
 
         $data['is_active'] = $r->has('is_active') ? 1 : 0;
-        $data['order']     = $data['order'] ?? $kurban->order;
 
         if ($r->hasFile('thumbnail')) {
             if ($kurban->thumbnail) Storage::disk('public')->delete($kurban->thumbnail);
@@ -80,9 +79,7 @@ class KurbanController extends Controller
         }
 
         $kurban->update($data);
-
-        return redirect()->route('admin.kurban.index')
-            ->with('success', 'Data hewan kurban berhasil diperbarui!');
+        return redirect()->route('admin.kurban.index')->with('success', 'Data hewan berhasil diperbarui!');
     }
 
     public function destroy(KurbanAnimal $kurban)

@@ -1076,7 +1076,7 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
             @if($activeProduct->unit)<div style="display:flex;justify-content:space-between;padding:.75rem;background:var(--bg2);border-radius:8px"><span style="font-size:.85rem;color:var(--text2)">Satuan</span><span style="font-size:.85rem;font-weight:600">{{ $activeProduct->unit }}</span></div>@endif
           </div>
           <div class="divider"></div>
-          <p style="font-size:.83rem;color:var(--text3);line-height:1.6"><i class="fas fa-info-circle" style="color:var(--blue)"></i> Harga dapat berubah sewaktu-waktu. Hubungi kami untuk konfirmasi harga terkini.</p>
+          {{-- <p style="font-size:.83rem;color:var(--text3);line-height:1.6"><i class="fas fa-info-circle" style="color:var(--blue)"></i> Harga dapat berubah sewaktu-waktu. Hubungi kami untuk konfirmasi harga terkini.</p> --}}
         </div>
 
         @if(isset($relatedProducts) && $relatedProducts->count())
@@ -1798,13 +1798,17 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
   </div></section>
 </div>
 
+{{-- ==================== PAGE KURBAN (PUBLIC) ==================== --}}
 <div id="page-kurban" class="page {{ $activePage==='kurban' ? 'active' : '' }}">
 
-  {{-- Hero --}}
-  <div class="page-hero" style="background:linear-gradient(135deg,#1a6b2f 0%,#2d9b4e 60%,#5ab87a 100%)">
+  {{-- ===== HERO ===== --}}
+  <div class="page-hero" style="background:linear-gradient(135deg,#1a6b2f 0%,#2d9b4e 60%,#5ab87a 100%);padding:4rem 2rem 3rem">
     <div style="display:inline-block;background:rgba(255,255,255,.2);padding:.3rem 1rem;border-radius:99px;font-size:.78rem;font-weight:700;letter-spacing:.08em;margin-bottom:.75rem">🐐 TERNAK SALAM</div>
     <h1 data-en="Qurban Animals" data-id="Kambing Kurban">Kambing Kurban</h1>
-    <p data-en="Choice sacrificial animals from Mendelem community farm — healthy, trusted, ready for qurban." data-id="Hewan kurban pilihan dari peternakan komunitas Mendelem — sehat, terpercaya, siap kurban.">Hewan kurban pilihan dari peternakan komunitas Mendelem — sehat, terpercaya, siap kurban.</p>
+    <p data-en="Choice sacrificial animals from Mendelem community farm — healthy, trusted, ready for qurban."
+       data-id="Hewan kurban pilihan dari peternakan komunitas Mendelem — sehat, terpercaya, siap kurban.">
+      Hewan kurban pilihan dari peternakan komunitas Mendelem — sehat, terpercaya, siap kurban.
+    </p>
 
     {{-- Filter pills --}}
     @if(isset($animals) && $animals->count())
@@ -1829,12 +1833,56 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
     @endif
   </div>
 
-  {{-- Grid Hewan --}}
+  {{-- ===== TABEL KATEGORI GRADE ===== --}}
+  @php
+  $gradeData = [
+    'A' => ['berat'=>'45–50 kg','harga'=>5250000,'color'=>'#00ca5b'],
+    'B' => ['berat'=>'41–45 kg','harga'=>4750000,'color'=>'#ff8114'],
+    'C' => ['berat'=>'36–40 kg','harga'=>4250000,'color'=>'#97a800'],
+    'D' => ['berat'=>'31–35 kg','harga'=>3750000,'color'=>'#7459ac'],
+    'E' => ['berat'=>'26–30 kg','harga'=>3250000,'color'=>'#2980b9'],
+    'F' => ['berat'=>'24–25 kg','harga'=>2750000,'color'=>'#ad445e'],
+    'G' => ['berat'=>'20–23 kg','harga'=>2550000,'color'=>'#12aeb9'],
+    'H' => ['berat'=>'18–20 kg','harga'=>2250000,'color'=>'#95a5a6'],
+  ];
+  @endphp
+
+  <div style="background:linear-gradient(135deg,#1a3a1e,#1a6b2f);padding:2.5rem 2rem">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:1.5rem">
+        <div style="display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.35rem 1rem;border-radius:99px;margin-bottom:.6rem"
+             data-en="Price Categories" data-id="Kategori Harga">Kategori Harga</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff;line-height:1.2"
+            data-en="Goat & Sheep Categories" data-id="Kategori Kambing & Domba">Kategori Kambing & Domba</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem">
+        @foreach($gradeData as $g => $info)
+        <div style="background:rgba(255,255,255,.1);border:2px solid {{ $info['color'] }}88;border-radius:14px;padding:1.1rem .75rem;text-align:center;backdrop-filter:blur(4px);transition:all .2s"
+             onmouseover="this.style.background='{{ $info['color'] }}30';this.style.transform='translateY(-3px)'"
+             onmouseout="this.style.background='rgba(255,255,255,.1)';this.style.transform=''">
+          <div style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;background:{{ $info['color'] }};margin:0 auto .6rem">
+            <span style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:#fff">{{ $g }}</span>
+          </div>
+          <div style="font-weight:800;font-size:.88rem;color:#fff;margin-bottom:.2rem">Grade {{ $g }}</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.8);margin-bottom:.3rem">{{ $info['berat'] }}</div>
+          <div style="font-size:.8rem;font-weight:700;color:#fff">Rp {{ number_format($info['harga'],0,',','.') }}</div>
+        </div>
+        @endforeach
+      </div>
+      {{-- <p style="text-align:center;font-size:.78rem;color:rgba(255,255,255,.6);margin-top:1rem">   * Harga dapat berubah sewaktu-waktu. Hubungi kami untuk konfirmasi.      </p> --}}
+    </div>
+  </div>
+
+  {{-- ===== GRID HEWAN ===== --}}
   <section><div class="container">
 
     @if(isset($animals) && $animals->count())
     <div id="kurbanGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem">
       @foreach($animals as $hewan)
+      @php
+        $hGrade = $hewan->grade ?? null;
+        $hColor = $hGrade ? ($gradeData[$hGrade]['color'] ?? '#718096') : '#1a6b2f';
+      @endphp
       <a href="{{ route('kurban.show', $hewan) }}"
          class="kurban-card"
          data-jenis="{{ $hewan->jenis_hewan }}"
@@ -1845,13 +1893,19 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
           {{ $hewan->status_label }}
         </div>
 
-        {{-- Jenis Hewan badge --}}
-        <div style="position:absolute;top:.75rem;right:.75rem;z-index:2;padding:.25rem .65rem;border-radius:99px;font-size:.72rem;font-weight:700;background:{{ $hewan->jenis_hewan==='kambing'?'#dcfce7':'#ede9fe' }};color:{{ $hewan->jenis_hewan==='kambing'?'#15803d':'#6d28d9' }}">
-          {{ $hewan->jenis_hewan==='kambing'?'🐐 Kambing':'🐑 Domba' }}
+        {{-- Grade badge --}}
+        @if($hGrade)
+        <div style="position:absolute;top:.75rem;right:.75rem;z-index:2;width:36px;height:36px;border-radius:9px;background:{{ $hColor }};display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.25)">
+          <span style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:#fff">{{ $hGrade }}</span>
         </div>
+        @else
+        <div style="position:absolute;top:.75rem;right:.75rem;z-index:2;padding:.25rem .65rem;border-radius:99px;font-size:.72rem;font-weight:700;background:{{ $hewan->jenis_hewan==='kambing'?'#dcfce7':'#ede9fe' }};color:{{ $hewan->jenis_hewan==='kambing'?'#15803d':'#6d28d9' }}">
+          {{ $hewan->jenis_hewan==='kambing'?'🐐':'🐑' }}
+        </div>
+        @endif
 
         {{-- Foto --}}
-        <div style="height:210px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative">
+        <div style="height:210px;background:{{ $hGrade ? $hColor.'18' : 'linear-gradient(135deg,#f0fdf4,#dcfce7)' }};display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative">
           @if($hewan->thumbnail)
             <img src="{{ asset('storage/'.$hewan->thumbnail) }}" style="width:100%;height:100%;object-fit:cover" alt="{{ $hewan->name }}">
           @else
@@ -1860,65 +1914,79 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
               <div style="font-size:.78rem;margin-top:.25rem">Foto belum tersedia</div>
             </div>
           @endif
-          {{-- Overlay hover --}}
           <div class="kurban-overlay" style="position:absolute;inset:0;background:rgba(15,107,47,.8);display:flex;align-items:center;justify-content:center;gap:.5rem;color:#fff;font-size:.9rem;font-weight:700;opacity:0;transition:opacity .25s">
             <i class="fas fa-eye"></i> Lihat Detail
           </div>
         </div>
 
         {{-- Info --}}
-        <div style="padding:1.25rem">
-          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;color:var(--text);margin-bottom:.4rem">
-            {{ $hewan->name ?? (ucfirst($hewan->jenis_hewan).' #'.$hewan->id) }}
+        <div style="padding:1.1rem">
+          {{-- Kode & nama --}}
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap">
+            @if($hewan->kode)
+            <span style="font-family:monospace;font-size:.72rem;font-weight:800;color:{{ $hColor }};background:{{ $hColor }}15;border:1px solid {{ $hColor }}33;padding:.1rem .45rem;border-radius:5px;letter-spacing:.04em">{{ $hewan->kode }}</span>
+            @endif
+            <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;color:var(--text)">
+              {{ $hewan->name ?? (ucfirst($hewan->jenis_hewan).' '.($hGrade ? 'Grade '.$hGrade : '#'.$hewan->id)) }}
+            </span>
           </div>
 
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
-            <span style="font-size:.75rem;padding:.15rem .55rem;border-radius:99px;background:#eff6ff;color:#1d4ed8;font-weight:600">
+          {{-- Grade info bar --}}
+          @if($hGrade)
+          <div style="background:{{ $hColor }}12;border-left:3px solid {{ $hColor }};border-radius:0 6px 6px 0;padding:.35rem .65rem;margin-bottom:.65rem;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:.75rem;font-weight:700;color:{{ $hColor }}">Grade {{ $hGrade }}</span>
+            <span style="font-size:.72rem;color:var(--text3)">{{ $gradeData[$hGrade]['berat'] ?? '' }}</span>
+          </div>
+          @endif
+
+          {{-- Kelamin & ras --}}
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.65rem">
+            <span style="font-size:.72rem;padding:.12rem .5rem;border-radius:99px;background:#eff6ff;color:#1d4ed8;font-weight:600">
               {{ $hewan->kelamin==='jantan'?'♂ Jantan':'♀ Betina' }}
             </span>
             @if($hewan->jenis_ras)
-            <span style="font-size:.75rem;padding:.15rem .55rem;border-radius:99px;background:#f1f5f9;color:#475569;font-weight:600">
+            <span style="font-size:.72rem;padding:.12rem .5rem;border-radius:99px;background:#f1f5f9;color:#475569;font-weight:600">
               {{ $hewan->jenis_ras }}
+            </span>
+            @endif
+            @if($hewan->berat_kg)
+            <span style="font-size:.72rem;padding:.12rem .5rem;border-radius:99px;background:#f0fdf4;color:#15803d;font-weight:600">
+              {{ $hewan->berat_kg }} kg
             </span>
             @endif
           </div>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
-            <div>
-              @if($hewan->berat_kg)
-              <div style="font-size:.82rem;color:var(--text2)"><i class="fas fa-weight-hanging" style="color:#6b7280;font-size:.75rem"></i> {{ $hewan->berat_kg }} kg</div>
-              @endif
-              @if($hewan->umur)
-              <div style="font-size:.82rem;color:var(--text2)"><i class="fas fa-calendar-alt" style="color:#6b7280;font-size:.75rem"></i> {{ $hewan->umur }}</div>
-              @endif
-            </div>
-            <div style="font-size:1.1rem;font-weight:800;color:#1a6b2f">{{ $hewan->harga_format }}</div>
+          {{-- Harga --}}
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:1.15rem;font-weight:800;color:#1a6b2f">{{ $hewan->harga_format }}</div>
+            @if($hewan->status === 'tersedia')
+            <span style="font-size:.72rem;color:#15803d;font-weight:600;background:#dcfce7;padding:.2rem .55rem;border-radius:99px">✓ Tersedia</span>
+            @endif
           </div>
+        </div>
 
-          @if($hewan->status === 'tersedia')
-          <div style="margin-top:1rem;padding:.6rem 1rem;background:#f0fdf4;border-radius:8px;text-align:center;font-size:.82rem;font-weight:600;color:#15803d;border:1px solid #bbf7d0">
+        {{-- Bottom CTA --}}
+        @if($hewan->status === 'tersedia')
+        <div style="padding:.5rem 1.1rem .9rem">
+          <div style="padding:.5rem 1rem;background:#f0fdf4;border-radius:8px;text-align:center;font-size:.78rem;font-weight:600;color:#15803d;border:1px solid #bbf7d0">
             <i class="fas fa-comments"></i> Hubungi Kami untuk Pemesanan
           </div>
-          @elseif($hewan->status === 'dipesan')
-          <div style="margin-top:1rem;padding:.6rem 1rem;background:#fef9c3;border-radius:8px;text-align:center;font-size:.82rem;font-weight:600;color:#92400e;border:1px solid #fde68a">
-            Sedang Dipesan
-          </div>
-          @else
-          <div style="margin-top:1rem;padding:.6rem 1rem;background:#fee2e2;border-radius:8px;text-align:center;font-size:.82rem;font-weight:600;color:#b91c1c;border:1px solid #fecaca">
-            Sudah Terjual
-          </div>
-          @endif
         </div>
+        @elseif($hewan->status === 'dipesan')
+        <div style="padding:.5rem 1.1rem .9rem"><div style="padding:.5rem;background:#fef9c3;border-radius:8px;text-align:center;font-size:.75rem;font-weight:600;color:#92400e">Sedang Dipesan</div></div>
+        @else
+        <div style="padding:.5rem 1.1rem .9rem"><div style="padding:.5rem;background:#fee2e2;border-radius:8px;text-align:center;font-size:.75rem;font-weight:600;color:#b91c1c">Sudah Terjual</div></div>
+        @endif
+
       </a>
       @endforeach
     </div>
 
-    {{-- Tidak ada hewan --}}
     @else
     <div style="text-align:center;padding:5rem 2rem;color:var(--text3)">
       <div style="font-size:5rem;margin-bottom:1rem">🐐</div>
-      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:.5rem">Segera Hadir</h3>
-      <p data-en="The list of qurban animals will be available soon. Contact us for more information." data-id="Daftar hewan kurban akan segera tersedia. Hubungi kami untuk informasi lebih lanjut.">Daftar hewan kurban akan segera tersedia. Hubungi kami untuk informasi lebih lanjut.</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:.5rem" data-en="Coming Soon" data-id="Segera Hadir">Segera Hadir</h3>
+      <p data-en="The list of qurban animals will be available soon." data-id="Daftar hewan kurban akan segera tersedia.">Daftar hewan kurban akan segera tersedia.</p>
       <a href="https://wa.me/6281234567890" class="btn-wa" target="_blank" style="display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;background:#25d366;color:#fff;padding:.75rem 1.75rem;border-radius:10px;font-weight:600;text-decoration:none">
         <i class="fab fa-whatsapp"></i> Tanya via WhatsApp
       </a>
@@ -1927,13 +1995,16 @@ footer{background:var(--text);color:rgba(255,255,255,.9);padding:4rem 2rem 2rem}
 
   </div></section>
 
-  {{-- Call to action bawah --}}
+  {{-- CTA Bawah --}}
   @if(isset($animals) && $animals->count())
   <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);padding:3rem 2rem;border-top:1px solid #bbf7d0">
     <div class="container" style="text-align:center">
       <div style="font-size:2rem;margin-bottom:.5rem">🤝</div>
-      <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:.5rem;color:#14532d">Ingin Memesan atau Ada Pertanyaan?</h3>
-      <p style="color:#166534;font-size:.9rem;margin-bottom:1.25rem">Tim kami siap membantu Anda memilih hewan kurban terbaik.</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:.5rem;color:#14532d"
+          data-en="Want to Order or Have Questions?" data-id="Ingin Memesan atau Ada Pertanyaan?">Ingin Memesan atau Ada Pertanyaan?</h3>
+      <p style="color:#166534;font-size:.9rem;margin-bottom:1.25rem"
+         data-en="Our team is ready to help you choose the best qurban animal."
+         data-id="Tim kami siap membantu Anda memilih hewan kurban terbaik.">Tim kami siap membantu Anda memilih hewan kurban terbaik.</p>
       <a href="https://wa.me/6281234567890?text={{ urlencode('Assalamualaikum, saya ingin menanyakan tentang hewan kurban dari Mendelem Project (Ternak Salam).') }}"
          target="_blank"
          style="display:inline-flex;align-items:center;gap:.6rem;background:#25d366;color:#fff;padding:.8rem 2rem;border-radius:10px;font-weight:700;text-decoration:none;font-size:.95rem">

@@ -8,11 +8,41 @@ class KurbanAnimal extends Model
     protected $table = 'kurban_animals';
 
     protected $fillable = [
+        'kode', 'grade',
         'name', 'jenis_hewan', 'kelamin', 'jenis_ras',
         'berat_kg', 'umur', 'harga', 'status',
         'is_active', 'order', 'thumbnail', 'media',
         'whatsapp_number', 'catatan',
     ];
+
+     // Data grade lengkap — digunakan di view
+    public static function gradeData(): array
+    {
+        return [
+            'A' => ['label'=>'Grade A','berat'=>'45–50 kg','harga'=>5250000,'color'=>'#00ca5b'],
+            'B' => ['label'=>'Grade B','berat'=>'41–45 kg','harga'=>4750000,'color'=>'#ff8114'],
+            'C' => ['label'=>'Grade C','berat'=>'36–40 kg','harga'=>4250000,'color'=>'#97a800'],
+            'D' => ['label'=>'Grade D','berat'=>'31–35 kg','harga'=>3750000,'color'=>'#7459ac'],
+            'E' => ['label'=>'Grade E','berat'=>'26–30 kg','harga'=>3250000,'color'=>'#2980b9'],
+            'F' => ['label'=>'Grade F','berat'=>'24–25 kg','harga'=>2750000,'color'=>'#ad445e'],
+            'G' => ['label'=>'Grade G','berat'=>'20–23 kg','harga'=>2550000,'color'=>'#12aeb9'],
+            'H' => ['label'=>'Grade H','berat'=>'18–20 kg','harga'=>2250000,'color'=>'#95a5a6'], // ← TAMBAH
+        ];
+    }
+
+    // Warna badge grade
+    public function getGradeColorAttribute(): string
+    {
+        return self::gradeData()[$this->grade]['color'] ?? '#718096';
+    }
+
+    // Label grade lengkap (untuk display)
+    public function getGradeLabelAttribute(): string
+    {
+        if (!$this->grade) return '—';
+        $data = self::gradeData()[$this->grade] ?? null;
+        return $data ? "Grade {$this->grade} ({$data['berat']})" : "Grade {$this->grade}";
+    }
 
     protected $casts = [
         'media'     => 'array',

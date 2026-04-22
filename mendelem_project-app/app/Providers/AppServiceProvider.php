@@ -23,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
             }
             $view->with('unreadMessages', $unreadMessages);
         });
+
+        // Di method boot():
+\Illuminate\Http\UploadedFile::macro('isHeic', function() {
+    return in_array($this->getMimeType(), ['image/heic','image/heif']);
+});
     }
 }
